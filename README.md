@@ -5,6 +5,8 @@ Template "Template GlusterFS disks" finds all volumes, creates new items and tri
 
 Monitor size, innodes, status, bricks count.
 
+![GlusterFS](https://user-images.githubusercontent.com/12905969/90630503-571a7e00-e24b-11ea-86cf-b1913bddf39c.png)
+
 # Dependencies
 perl, sudo, zabbix-agent, gluster.
 
