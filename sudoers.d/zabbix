@@ -1,0 +1,6 @@
+#zabbix
+Cmnd_Alias MON = /etc/zabbix/gluster-monitoring.pl *
+Defaults:zabbix !requiretty
+Defaults:zabbix !syslog
+
+zabbix ALL = NOPASSWD: MON
