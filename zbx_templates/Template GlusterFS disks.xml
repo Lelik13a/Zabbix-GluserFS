@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-08-19T11:28:59Z</date>
+    <date>2020-08-20T06:15:32Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -25,6 +25,27 @@
                     <name>Gluster raw items</name>
                 </application>
             </applications>
+            <items>
+                <item>
+                    <name>Gluster peers status</name>
+                    <key>peers.status</key>
+                    <delay>5m</delay>
+                    <history>1d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>Gluster raw items</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <params>6h</params>
+                        </step>
+                    </preprocessing>
+                </item>
+            </items>
             <discovery_rules>
                 <discovery_rule>
                     <name>Gluster volumes</name>
@@ -371,6 +392,71 @@
                             <priority>WARNING</priority>
                         </trigger_prototype>
                     </trigger_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Gluster peers</name>
+                    <key>pool.discovery</key>
+                    <delay>1h</delay>
+                    <lifetime>3d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Peer {#HOSTNAME} connected status</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.peer.connected[{#UUID}]</key>
+                            <delay>0</delay>
+                            <applications>
+                                <application>
+                                    <name>Gluster</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>string(/cliOutput/peerStatus/peer[uuid=&quot;{#UUID}&quot;]/connected)</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>peers.status</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&lt;&gt;1</expression>
+                                    <name>Gluster peer {#HOSTNAME} disconnected</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Peer state {#HOSTNAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.peer.state[{#UUID}]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>Gluster</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>string(/cliOutput/peerStatus/peer[uuid=&quot;{#UUID}&quot;]/stateStr)</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>peers.status</key>
+                            </master_item>
+                        </item_prototype>
+                    </item_prototypes>
                 </discovery_rule>
             </discovery_rules>
             <macros>
