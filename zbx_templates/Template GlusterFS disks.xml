@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2020-08-19T11:28:59Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template GlusterFS disks</template>
+            <name>Template GlusterFS disks</name>
+            <description>Monitor GlusterFS via gluster</description>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Gluster</name>
+                </application>
+                <application>
+                    <name>Gluster raw items</name>
+                </application>
+            </applications>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Gluster volumes</name>
+                    <key>gluster.discovery</key>
+                    <delay>1h</delay>
+                    <lifetime>3d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Gluster bricks free size</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.bricks.free[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <units>B</units>
+                            <description>Total free size of active bricks.</description>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>number(sum(/cliOutput/volStatus/volumes/volume/node/sizeFree))</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[status,{#NAME}]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster bricks inodes free</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.bricks.innodesFree[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>number(sum(/cliOutput/volStatus/volumes/volume/node/inodesFree))</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[status,{#NAME}]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster bricks innodes total</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.bricks.innodesTotal[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>number(sum(/cliOutput/volStatus/volumes/volume/node/inodesTotal))</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[status,{#NAME}]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster bricks total size</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.bricks.size[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <units>B</units>
+                            <description>Total size of active bricks.</description>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>number(sum(/cliOutput/volStatus/volumes/volume/node/sizeTotal))</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[status,{#NAME}]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume bricks count</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.volume.brickCount[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>3d</history>
+                            <trends>0</trends>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>number(/cliOutput/volInfo/volumes/volume/brickCount)</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[info,{#NAME}]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume bricks active count</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.volume.bricks.status[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>sum(/cliOutput/volStatus/volumes/volume/node/status)</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[status,{#NAME}]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume free size</name>
+                            <type>CALCULATED</type>
+                            <key>gluster.volume.free[{#NAME}]</key>
+                            <delay>5m</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <units>B</units>
+                            <params>last(gluster.bricks.free[{#NAME}]) / last(gluster.volume.replicaCount[{#NAME}])</params>
+                            <description>Total bricks free size / replica count.</description>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume innodes free</name>
+                            <type>CALCULATED</type>
+                            <key>gluster.volume.innodesFree[{#NAME}]</key>
+                            <delay>5m</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <params>last(gluster.bricks.innodesFree[{#NAME}]) / last(gluster.volume.replicaCount[{#NAME}])</params>
+                            <description>Total bricks innodes free / replica count.</description>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume innodes</name>
+                            <type>CALCULATED</type>
+                            <key>gluster.volume.innodes[{#NAME}]</key>
+                            <delay>1h</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <params>last(gluster.bricks.innodesTotal[{#NAME}]) / last(gluster.volume.replicaCount[{#NAME}])</params>
+                            <description>Total bricks innodes / replica count.</description>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume replica count</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.volume.replicaCount[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>3d</history>
+                            <trends>0</trends>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>number(/cliOutput/volInfo/volumes/volume/replicaCount)</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[info,{#NAME}]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume size</name>
+                            <type>CALCULATED</type>
+                            <key>gluster.volume.size[{#NAME}]</key>
+                            <delay>1h</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <units>B</units>
+                            <params>last(gluster.bricks.size[{#NAME}]) / last(gluster.volume.replicaCount[{#NAME}])</params>
+                            <description>Total bricks size / replica count.</description>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume status</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.volume.status[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>3d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>/cliOutput/volInfo/volumes/volume/statusStr/text()</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[info,{#NAME}]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(Started)}=0</expression>
+                                    <name>Volume {#NAME} not Started</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume info {#NAME}</name>
+                            <key>gluster.volume[info,{#NAME}]</key>
+                            <delay>1h</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Gluster raw items</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>12h</params>
+                                </step>
+                            </preprocessing>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume status {#NAME}</name>
+                            <key>gluster.volume[status,{#NAME}]</key>
+                            <delay>5m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Gluster raw items</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template GlusterFS disks:gluster.volume.brickCount[{#NAME}].last()} &lt;&gt; {Template GlusterFS disks:gluster.volume.bricks.status[{#NAME}].last()}</expression>
+                            <name>Brick in Volume {#NAME} Offline</name>
+                            <opdata>Bricks active: {ITEM.LASTVALUE2} of {ITEM.LASTVALUE1}</opdata>
+                            <priority>AVERAGE</priority>
+                            <description>Count active bricks is differ from total count.</description>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template GlusterFS disks:gluster.volume.innodesFree[{#NAME}].last()} / {Template GlusterFS disks:gluster.volume.innodes[{#NAME}].last()} * 100 &lt; 10</expression>
+                            <name>Free innodes is less than 10% on volume {#NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template GlusterFS disks:gluster.volume.free[{#NAME}].last()} / {Template GlusterFS disks:gluster.volume.size[{#NAME}].last()} * 100 &lt; {$GLUSTER.FS.PFREE.MIN.WARN}</expression>
+                            <name>Free volume ( {#NAME}) size is less then {$GLUSTER.FS.PFREE.MIN.WARN}%</name>
+                            <opdata>Space free: {ITEM.LASTVALUE1} from {ITEM.LASTVALUE2}</opdata>
+                            <priority>WARNING</priority>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$GLUSTER.FS.PFREE.MIN.WARN}</macro>
+                    <value>15</value>
+                    <description>Free space percent</description>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>
