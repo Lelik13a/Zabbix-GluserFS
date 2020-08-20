@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-08-20T06:15:32Z</date>
+    <date>2020-08-20T06:32:13Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -80,7 +80,7 @@
                         <item_prototype>
                             <name>Gluster bricks inodes free</name>
                             <type>DEPENDENT</type>
-                            <key>gluster.bricks.innodesFree[{#NAME}]</key>
+                            <key>gluster.bricks.inodesFree[{#NAME}]</key>
                             <delay>0</delay>
                             <history>30d</history>
                             <trends>90d</trends>
@@ -100,9 +100,9 @@
                             </master_item>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gluster bricks innodes total</name>
+                            <name>Gluster bricks inodes total</name>
                             <type>DEPENDENT</type>
-                            <key>gluster.bricks.innodesTotal[{#NAME}]</key>
+                            <key>gluster.bricks.inodesTotal[{#NAME}]</key>
                             <delay>0</delay>
                             <history>30d</history>
                             <trends>90d</trends>
@@ -222,14 +222,14 @@
                             </application_prototypes>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gluster volume innodes free</name>
+                            <name>Gluster volume inodes free</name>
                             <type>CALCULATED</type>
-                            <key>gluster.volume.innodesFree[{#NAME}]</key>
+                            <key>gluster.volume.inodesFree[{#NAME}]</key>
                             <delay>5m</delay>
                             <history>30d</history>
                             <trends>90d</trends>
-                            <params>last(gluster.bricks.innodesFree[{#NAME}]) / last(gluster.volume.replicaCount[{#NAME}])</params>
-                            <description>Total bricks innodes free / replica count.</description>
+                            <params>last(gluster.bricks.inodesFree[{#NAME}]) / last(gluster.volume.replicaCount[{#NAME}])</params>
+                            <description>Total bricks inodes free / replica count.</description>
                             <application_prototypes>
                                 <application_prototype>
                                     <name>Gluster vol: {#NAME}</name>
@@ -237,14 +237,14 @@
                             </application_prototypes>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gluster volume innodes</name>
+                            <name>Gluster volume inodes</name>
                             <type>CALCULATED</type>
-                            <key>gluster.volume.innodes[{#NAME}]</key>
+                            <key>gluster.volume.inodes[{#NAME}]</key>
                             <delay>1h</delay>
                             <history>30d</history>
                             <trends>90d</trends>
-                            <params>last(gluster.bricks.innodesTotal[{#NAME}]) / last(gluster.volume.replicaCount[{#NAME}])</params>
-                            <description>Total bricks innodes / replica count.</description>
+                            <params>last(gluster.bricks.inodesTotal[{#NAME}]) / last(gluster.volume.replicaCount[{#NAME}])</params>
+                            <description>Total bricks inodes / replica count.</description>
                             <application_prototypes>
                                 <application_prototype>
                                     <name>Gluster vol: {#NAME}</name>
@@ -381,8 +381,8 @@
                             <description>Count active bricks is differ from total count.</description>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template GlusterFS disks:gluster.volume.innodesFree[{#NAME}].last()} / {Template GlusterFS disks:gluster.volume.innodes[{#NAME}].last()} * 100 &lt; 10</expression>
-                            <name>Free innodes is less than 10% on volume {#NAME}</name>
+                            <expression>{Template GlusterFS disks:gluster.volume.inodesFree[{#NAME}].last()} / {Template GlusterFS disks:gluster.volume.inodes[{#NAME}].last()} * 100 &lt; 10</expression>
+                            <name>Free inodes is less than 10% on volume {#NAME}</name>
                             <priority>HIGH</priority>
                         </trigger_prototype>
                         <trigger_prototype>
@@ -426,6 +426,7 @@
                                 <trigger_prototype>
                                     <expression>{last()}&lt;&gt;1</expression>
                                     <name>Gluster peer {#HOSTNAME} disconnected</name>
+                                    <opdata>Status: {ITEM.LASTVALUE1}</opdata>
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
