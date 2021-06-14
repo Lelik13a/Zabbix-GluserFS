@@ -82,5 +82,12 @@ my $result = `gluster peer status --xml`;
 
 }
 
+case "heal" {
+my $result = `gluster volume heal $ARGV[1] info --xml`;
+
+    print $result;
+
+}
+
 }
 

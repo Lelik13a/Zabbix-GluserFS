@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-08-20T06:32:13Z</date>
+    <date>2021-06-14T13:31:03Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -338,6 +338,53 @@
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume {#NAME} unhealed items</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.volume.unhealed[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <description>Number of unhealed (or healing pending) items in volume</description>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>sum(/cliOutput/healInfo/bricks/brick/numberOfEntries)</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[heal,{#NAME}]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;0</expression>
+                                    <name>Volume {#NAME} heals some items</name>
+                                    <opdata>items in heal state: {ITEM.LASTVALUE1}</opdata>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume heal info {#NAME}</name>
+                            <key>gluster.volume[heal,{#NAME}]</key>
+                            <delay>5m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Gluster raw items</name>
+                                </application>
+                            </applications>
                         </item_prototype>
                         <item_prototype>
                             <name>Gluster volume info {#NAME}</name>
