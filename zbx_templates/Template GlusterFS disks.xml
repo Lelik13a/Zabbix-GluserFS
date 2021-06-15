@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2021-06-14T13:31:03Z</date>
+    <date>2021-06-15T13:01:38Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -222,6 +222,38 @@
                             </application_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <name>Gluster volume {#NAME} heal pending items</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.volume.heal_pending[{#NAME}]</key>
+                            <delay>0</delay>
+                            <applications>
+                                <application>
+                                    <name>Gluster</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>sum(/cliOutput/healInfo/bricks/brick/numberOfEntriesInHealPending)</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[healsumm,{#NAME}]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;0</expression>
+                                    <name>Volume {#NAME} has some items in heal pending state</name>
+                                    <opdata>heal pending items: {ITEM.LASTVALUE1}</opdata>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
                             <name>Gluster volume inodes free</name>
                             <type>CALCULATED</type>
                             <key>gluster.volume.inodesFree[{#NAME}]</key>
@@ -256,6 +288,38 @@
                                     <params>6h</params>
                                 </step>
                             </preprocessing>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Gluster volume {#NAME} possibly healing items</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.volume.possibly_healing[{#NAME}]</key>
+                            <delay>0</delay>
+                            <applications>
+                                <application>
+                                    <name>Gluster</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>sum(/cliOutput/healInfo/bricks/brick/numberOfEntriesPossiblyHealing)</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[healsumm,{#NAME}]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;0</expression>
+                                    <name>Volume {#NAME} has some items which possibly undergoing heal</name>
+                                    <opdata>heal undergoing items: {ITEM.LASTVALUE1}</opdata>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
                             <name>Gluster volume replica count</name>
@@ -306,6 +370,39 @@
                             </preprocessing>
                         </item_prototype>
                         <item_prototype>
+                            <name>Gluster volume {#NAME} items in split-brain</name>
+                            <type>DEPENDENT</type>
+                            <key>gluster.volume.split-brain[{#NAME}]</key>
+                            <delay>0</delay>
+                            <applications>
+                                <application>
+                                    <name>Gluster</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>XMLPATH</type>
+                                    <params>sum(/cliOutput/healInfo/bricks/brick/numberOfEntriesInSplitBrain)</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>6h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>gluster.volume[healsumm,{#NAME}]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;0</expression>
+                                    <name>Volume {#NAME} has some items in split-brain</name>
+                                    <opdata>items in split-brain: {ITEM.LASTVALUE1}</opdata>
+                                    <priority>HIGH</priority>
+                                    <description>There are non zero items in split-brain state on volume!</description>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
                             <name>Gluster volume status</name>
                             <type>DEPENDENT</type>
                             <key>gluster.volume.status[{#NAME}]</key>
@@ -340,42 +437,8 @@
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gluster volume {#NAME} unhealed items</name>
-                            <type>DEPENDENT</type>
-                            <key>gluster.volume.unhealed[{#NAME}]</key>
-                            <delay>0</delay>
-                            <history>30d</history>
-                            <description>Number of unhealed (or healing pending) items in volume</description>
-                            <application_prototypes>
-                                <application_prototype>
-                                    <name>Gluster vol: {#NAME}</name>
-                                </application_prototype>
-                            </application_prototypes>
-                            <preprocessing>
-                                <step>
-                                    <type>XMLPATH</type>
-                                    <params>sum(/cliOutput/healInfo/bricks/brick/numberOfEntries)</params>
-                                </step>
-                                <step>
-                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
-                                    <params>6h</params>
-                                </step>
-                            </preprocessing>
-                            <master_item>
-                                <key>gluster.volume[heal,{#NAME}]</key>
-                            </master_item>
-                            <trigger_prototypes>
-                                <trigger_prototype>
-                                    <expression>{last()}&gt;0</expression>
-                                    <name>Volume {#NAME} heals some items</name>
-                                    <opdata>items in heal state: {ITEM.LASTVALUE1}</opdata>
-                                    <priority>WARNING</priority>
-                                </trigger_prototype>
-                            </trigger_prototypes>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>Gluster volume heal info {#NAME}</name>
-                            <key>gluster.volume[heal,{#NAME}]</key>
+                            <name>Gluster volume heal info summary {#NAME}</name>
+                            <key>gluster.volume[healsumm,{#NAME}]</key>
                             <delay>5m</delay>
                             <history>1d</history>
                             <trends>0</trends>

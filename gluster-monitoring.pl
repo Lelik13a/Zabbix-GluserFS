@@ -82,8 +82,8 @@ my $result = `gluster peer status --xml`;
 
 }
 
-case "heal" {
-my $result = `gluster volume heal $ARGV[1] info --xml`;
+case "healsumm" {
+my $result = `gluster volume heal $ARGV[1] info summary --xml`;
 
     print $result;
 
