@@ -3,7 +3,7 @@ GlusterFS volumes monitoring through Zabbix.
 
 Template "Template GlusterFS disks" finds all peers and volumes, creates new items and triggers.
 
-Monitor peers status, volumes size, inodes, status, bricks count and heal status.
+Monitor peers status, volumes size, inodes, volume status, bricks count, heal and split-brain status.
 
 ![GlusterFS](https://user-images.githubusercontent.com/12905969/90630503-571a7e00-e24b-11ea-86cf-b1913bddf39c.png)
 
