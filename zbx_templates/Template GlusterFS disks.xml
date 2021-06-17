@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>4.4</version>
-    <date>2021-06-15T13:01:38Z</date>
+    <version>5.0</version>
+    <date>2021-06-17T10:44:39Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -222,15 +222,15 @@
                             </application_prototypes>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gluster volume {#NAME} heal pending items</name>
+                            <name>Gluster volume heal pending items</name>
                             <type>DEPENDENT</type>
                             <key>gluster.volume.heal_pending[{#NAME}]</key>
                             <delay>0</delay>
-                            <applications>
-                                <application>
-                                    <name>Gluster</name>
-                                </application>
-                            </applications>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
                             <preprocessing>
                                 <step>
                                     <type>XMLPATH</type>
@@ -290,15 +290,15 @@
                             </preprocessing>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gluster volume {#NAME} possibly healing items</name>
+                            <name>Gluster volume possibly healing items</name>
                             <type>DEPENDENT</type>
                             <key>gluster.volume.possibly_healing[{#NAME}]</key>
                             <delay>0</delay>
-                            <applications>
-                                <application>
-                                    <name>Gluster</name>
-                                </application>
-                            </applications>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
                             <preprocessing>
                                 <step>
                                     <type>XMLPATH</type>
@@ -370,15 +370,15 @@
                             </preprocessing>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gluster volume {#NAME} items in split-brain</name>
+                            <name>Gluster volume items in split-brain</name>
                             <type>DEPENDENT</type>
                             <key>gluster.volume.split-brain[{#NAME}]</key>
                             <delay>0</delay>
-                            <applications>
-                                <application>
-                                    <name>Gluster</name>
-                                </application>
-                            </applications>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gluster vol: {#NAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
                             <preprocessing>
                                 <step>
                                     <type>XMLPATH</type>
